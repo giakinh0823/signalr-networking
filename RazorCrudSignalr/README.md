@@ -503,3 +503,9 @@
         ```
     - Ở đây ta bắn sự kiện `await _signalRHub.Clients.All.SendAsync("LoadEmployees");`. Vậy `LoadEmployees` ở đâu. Thì thực chất ở đây mình đặt là gì cũng được. Nếu sửa ở đây là `GetEmployees` thì ở file `site.js` cũng phải sửa thành `GetEmployees` để chúng ta biết đang lắng nghe `Event` nào và đang thực hiện bắn `Event` nào.
     - Thế là đã hoàn thành Crud bằng signalr
+
+**Lưu ý**
+- Nếu post không được thì thêm cái này vào form
+    ```html
+    @Html.AntiForgeryToken()
+    ```
