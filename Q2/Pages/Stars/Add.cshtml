@@ -1,0 +1,43 @@
+﻿@page "/Stars/Add"
+@model Q2.Pages.Stars.AddModel
+@{
+}
+
+<h1 style="color:red">Add stars</h1>
+<form method="post" action="/Stars/Add">
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="username" >Stars name:</label>
+        <input type="text" name="FullName" required>
+    </div>
+    <div>
+        <label>Gender:</label>
+        <label for="male">
+            <input type="radio" name="Male" value="true" required checked> Male
+        </label>
+        <label for="female">
+            <input type="radio" name="Male" value="false" required> Female
+        </label>
+    </div>
+    <div>
+        <label for="dob">Date of birth:</label>
+        <input type="date" name="Dob" required>
+    </div>
+
+    <div>
+        <label for="username">Description:</label>
+        <textarea id="description" name="Description" rows="10" cols="50" required></textarea>
+    </div>
+    <div>
+        <label>Country:</label>
+        <select name="Nationality" required>
+            <option value="">Select a country</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+            <option value="Japan">Japan</option>
+            <option value="China">China</option>
+        </select>
+    </div>
+    <button type="submit">Add</button>
+</form>
+

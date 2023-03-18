@@ -1,0 +1,81 @@
+﻿@page "/Stars"
+@model Q2.Pages.Stars.StarModel
+@{
+}
+
+
+<div style="margin-left:200px">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>StarName</th>
+                <th>Gender</th>
+                <th>DateOfBirth</th>
+                <th>Description</th>
+                <th>Nationality</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+
+            @foreach (var star in Model.stars)
+            {
+                <tr>
+                    <td>@star.FullName</td>
+                    <td>@star.Male</td>
+                    <td>@star.Dob</td>
+                    <td>@star.Description</td>
+                    <td>@star.Nationality</td>
+
+                    <td><a href="/Stars/Add">Add</a></td>
+                    <td><a href="/Stars/Update/@star.Id">Update</a></td>
+                    <td><a href="/Stars/Delete/@star.Id">Delete</a></td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+<script src="/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script>
+    var uri = "/api/Stars/";
+
+    const loadProdData = () => {
+        fetch('/api/Stars')
+            .then(response => response.json())
+            .then(stars => {
+                let tr = '';
+                stars.forEach((star) => {
+                    tr += `
+                              <tr>
+                                    <td>${star.fullName}</td>
+                                    <td>${star.male}</td>
+                                    <td>${star.dob}</td>
+                                    <td>${star.description}</td>
+                                    <td>${star.nationality}</td>
+
+                                    <td><a href="/Stars/Add">Add</a></td>
+                                    <td><a href="/Stars/Update/${star.id}">Update</a></td>
+                                    <td><a href="/Stars/Delete/${star.id}">Delete</a></td>
+                              </tr>
+                            `;
+                });
+                document.querySelector('#tableBody').innerHTML = tr;
+            })
+            .catch(error => console.log(error));
+    };
+
+    loadProdData();
+    var connection = new signalR.HubConnectionBuilder().withUrl("/signalrServer").build();
+    connection.start();
+
+    connection.on("LoadStars", function () {
+        loadProdData();
+    })
+    loadProdData();
+</script>
+
+
+

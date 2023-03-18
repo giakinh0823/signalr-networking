@@ -1,0 +1,117 @@
+﻿@page "/Movies/Director_movie/{DirectorID?}"
+@model Q2.Pages.Movies.Director_movieModel
+@{
+}
+
+<h1>List  of movies</h1>
+<div style="display:flex">
+	<div>
+		<table>
+			<tbody>
+				<tr><h4>Director</h4></tr>
+				@foreach (var director in Model.Directors)
+				{
+					@if (director.Id == Model.DirectorID)
+					{
+						<tr>
+							<div>
+								<a href="/Movies/Director_movie/@director.Id" style="font-weight:bold">@director.FullName</a>
+							</div>
+						</tr>
+					}
+					else
+					{
+						<tr>
+							<div>
+								<a href="/Movies/Director_movie/@director.Id">@director.FullName</a>
+							</div>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+	<div style="margin-left:200px">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>ReleaseDate</th>
+                    <th>Description</th>
+                    <th>Language</th>
+                    <th>Director</th>
+                    <th>Producer</th>
+                    <th style="width:200px;">Star</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+
+                @foreach (var movie in Model.Movies)
+                {
+                    <tr>
+                        <td>@movie.Title</td>
+                        <td>@movie.ReleaseDate</td>
+                        <td>@movie.Description</td>
+                        <td>@movie.Language</td>
+                        <td>@if (movie.Director != null)
+                            {
+                                @movie.Director.FullName
+                            }
+                         </td>
+
+                        <td>@movie.Producer.Name</td>
+                        <td style="width:200px;">
+                            @foreach (var star in movie.Stars)
+                            {
+                                @star.FullName<br />
+                            }
+                        </td>
+
+                        <td><a href="/Movies/Director_movie?deleteMovieId=@movie.Id">Delete</a></td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+	</div>
+</div>
+<script src="/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script>
+    var uri = "/api/Movies/";
+    
+    const loadProdData = () => {
+        fetch('/api/Movies')
+            .then(response => response.json())
+            .then(movies => {
+                let tr = '';
+                movies.forEach((movie) => {
+                    tr += `
+                          <tr>
+                                <td>${movie.title}</td>
+                                <td>${movie.releaseDate}</td>
+                                <td>${movie.dob}</td>
+                                <td>${movie.description}</td>
+                                <td>${movie.language}</td>
+                                <td>${movie?.director?.fullName}</td>
+                            <td>
+                                <a href="/Movies/Director_movie?deleteMovieId=${movie.id}">Delete</a
+                            </td>
+                          </tr>
+                        `;
+                });
+                document.querySelector('#tableBody').innerHTML = tr;
+            })
+            .catch(error => console.log(error));
+    };
+
+    loadProdData();
+    var connection = new signalR.HubConnectionBuilder().withUrl("/signalrServer").build();
+    connection.start();
+
+    connection.on("LoadMovies", function () {
+        loadProdData();
+    })
+    loadProdData();
+</script>

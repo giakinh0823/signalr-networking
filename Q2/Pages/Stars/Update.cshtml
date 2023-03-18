@@ -1,0 +1,90 @@
+﻿@page "/Stars/Update/{StarID}"
+@model Q2.Pages.Stars.UpdateModel
+@{
+}
+<h1 style="color:red">Update stars</h1>
+<form method="post" action="/Stars/Update/@Model.star.Id">
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="username">Stars name:</label>
+        <input type="text" name="FullName" value="@Model.star.FullName" required>
+    </div>
+    @if (Model.star.Male == true)
+    {
+        <div>
+            <label>Gender:</label>
+            <label for="male">
+                <input type="radio" name="Male" value="true" required checked> Male
+            </label>
+            <label for="female">
+                <input type="radio" name="Male" value="false" required> Female
+            </label>
+        </div>
+    } else
+    {
+        <div>
+            <label>Gender:</label>
+            <label for="male">
+                <input type="radio" name="Male" value="true" required > Male
+            </label>
+            <label for="female">
+                <input type="radio" name="Male" value="false" required checked> Female
+            </label>
+        </div>
+    }
+    <div>
+        <label for="dob">Date of birth:</label>
+        <input type="date" name="Dob" value="@Model.star.Dob.Value.ToString($"{0:yyyy-MM-dd}")" required>
+    </div>
+
+    <div>
+        <label for="username">Description:</label>
+        <textarea id="description" name="Description" rows="10" cols="50" required> @Model.star.Description</textarea>
+    </div>
+    <div>
+        <label>Country:</label>
+        <select name="Nationality" required>
+            <option value="">Select a country</option>
+            @if (Model.star.Nationality == "USA")
+            {
+                <option value="USA" selected>USA</option>
+
+            } else
+            {
+                <option value="USA">USA</option>
+            }
+            @if (Model.star.Nationality == "UK")
+            {
+                <option value="UK" sel>UK</option>
+
+            }
+            else
+            {
+                <option value="UK">UK</option>
+            }
+            @if (Model.star.Nationality == "Japan")
+            {
+
+                <option value="Japan" selected>Japan</option>
+
+            }
+            else
+            {
+
+                <option value="Japan">Japan</option>
+            }
+            @if (Model.star.Nationality == "China")
+            {
+
+                <option value="China" selected>China</option>
+
+            }
+            else
+            {
+
+                <option value="China">China</option>
+            }
+        </select>
+    </div>
+    <button type="submit">Add</button>
+</form>
