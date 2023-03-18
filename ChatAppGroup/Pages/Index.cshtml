@@ -1,0 +1,37 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container">
+    <div class="row p-1">
+            <div class="col-1">Group</div>
+            <div class="col-5"><input type="text" id="groupInput" /></div>
+        </div>
+        <div class="row p-1">
+            <div class="col-1">User</div>
+            <div class="col-5"><input type="text" id="userInput" /></div>
+        </div>
+        <div class="row p-1">
+            <div class="col-6 text-end">
+                <input type="button" id="sendButton" value="Join Group" />
+            </div>
+        </div>
+</div>
+
+<script>
+    // write javascript riderect to chat/{groupId} when click button
+    const sendButton = document.getElementById("sendButton");
+    sendButton.addEventListener("click", function () {
+        const groupInput = document.getElementById("groupInput");
+        const userInput = document.getElementById("userInput");
+        const group = groupInput.value;
+        const user = userInput.value;
+        if (group === "" || user === "") {
+            alert("Please enter group and user");
+            return;
+        }
+        window.location.href = `/chat/${group}?user=${user}`;
+    });
+</script>

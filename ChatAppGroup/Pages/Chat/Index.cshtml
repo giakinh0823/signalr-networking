@@ -1,0 +1,66 @@
+﻿@page "/chat/{groupId}"
+@model ChatAppGroup.Pages.Chat.IndexModel
+@{
+}
+
+<h2>Group: @Model.GroupId</h2>
+
+<div class="container">
+    <div class="row p-1">
+        <div class="col-1">User</div>
+        <div class="col-5">@ViewData["user"]</div>
+    </div>
+    <div class="row p-1">
+        <div class="col-1">Message</div>
+        <div class="col-5">
+            <input type="text" id="messageInput" />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6 text-end">
+            <input type="button" id="sendButton" value="Send" />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6">
+            <hr />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+    // Connect signalr with group
+
+    connection.start().then(function () {
+        connection.invoke("JoinGroup", "@Model.GroupId");
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    // Send message to group
+    const sendButton = document.getElementById("sendButton");
+    sendButton.addEventListener("click", function () {
+        const messageInput = document.getElementById("messageInput");
+        const message = messageInput.value;
+        if (message === "") {
+            alert("Please enter message");
+            return;
+        }
+        connection.invoke("SendMessageToGroup", "@Model.GroupId", "@ViewData["user"]", message);
+    });
+
+    // Receive message from @Model.GroupId
+    connection.on("ReceiveMessage", function (user, message) {
+        const messagesList = document.getElementById("messagesList");
+        const messageItem = document.createElement("li");
+        messageItem.innerHTML = `${user}: ${message}`;
+        messagesList.appendChild(messageItem);
+    });
+</script>
