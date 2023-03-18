@@ -1,0 +1,65 @@
+﻿<Window x:Class="PE_FA_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PE_FA_WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="850" Width="800">
+    <Grid>
+        <StackPanel Height="auto">
+            <StackPanel Height="auto" Width="452" HorizontalAlignment="Left" Margin="0 0 0 20">
+                <StackPanel Height="auto" Background="Aqua">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Text="Add stars" FontSize="30" Foreground="Red" FontWeight="Bold"/>
+                        <StackPanel Orientation="Vertical" Height="Auto" Margin="0 0 0 5">
+                            <Label FontWeight="Bold" FontSize="14">Star's Name</Label>
+                            <TextBox Height="25" Name="FullName" Text="{Binding FullName,  UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding SelectedItem, ElementName=listStars}"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical"  Height="Auto" Margin="0 0 0 5">
+                            <Label FontWeight="Bold" FontSize="14">Gender</Label>
+                            <DockPanel>
+                                <RadioButton GroupName="Gender" Content="Male" Margin="0 0 10 0" IsChecked="true" Name="Male"/>
+                                <RadioButton GroupName="Gender" Content="Female" Name="Female"/>
+                            </DockPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Height="Auto" Margin="0 0 0 5">
+                            <Label FontWeight="Bold" FontSize="14" Content="Date of birth"/>
+                            <DatePicker Name="DtpDateOfBirth"  
+                            Text="{Binding Dob}" DataContext="{Binding SelectedItem, ElementName=listStars}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Height="Auto" Margin="0 0 0 5">
+                            <Label FontWeight="Bold" FontSize="14">Description</Label>
+                            <TextBox  TextWrapping="Wrap" Height="163" Text="{Binding Description}" Name="Description" DataContext="{Binding SelectedItem, ElementName=listStars}"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Height="Auto" Margin="0 0 0 0">
+                            <Label FontWeight="Bold" FontSize="14">Nationality</Label>
+                            <ComboBox Name="Nationalities" ItemsSource="{Binding Nationalities}"></ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20 0 0">
+                    <Button x:Name="add" Margin="10 0 10 0" Padding="10 10 10 10" Click="add_Click">Add to Below List</Button>
+                    <Button x:Name="import" Margin="10 0 10 0" Padding="10 10 10 10" Click="import_Click">Import From File</Button>
+                    <Button x:Name="save" Margin="10 0 10 0" Padding="10 10 10 10" Click="save_Click">Save To Database</Button>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <ListView Name="listStars"
+                   PreviewMouseLeftButtonUp="listStars_PreviewMouseLeftButtonUp"  
+                   VerticalContentAlignment="Top"
+                   ScrollViewer.VerticalScrollBarVisibility="Visible"
+                   ScrollViewer.CanContentScroll="False" Margin="0,534,0,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Starr Name" Width="180"  DisplayMemberBinding="{Binding FullName}"/>
+                    <GridViewColumn Header="Gender" Width="100"  DisplayMemberBinding="{Binding Male}"/>
+                    <GridViewColumn Header="Date Of Birth" Width="180"  DisplayMemberBinding="{Binding Dob, StringFormat='dd/MM/yyyy'}"/>
+                    <GridViewColumn Header="Description" Width="180" DisplayMemberBinding="{Binding Description}"/>
+                    <GridViewColumn Header="Nationality" Width="180" DisplayMemberBinding="{Binding Nationality}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
